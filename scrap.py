@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-
+ 
 key = "AIzaSyAUkNMzDo7KUo2TrCYYF9ENig32N7RJYg4"
 
 def getLaunches(past=False):
@@ -61,5 +61,3 @@ if __name__ == '__main__':
         pprint(launch['location'])
         pprint(launch['pad'])
         print()
-
-
