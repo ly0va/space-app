@@ -40,6 +40,8 @@ launches['same'] = launches['lat'].apply(lambda x: density[x])
 
 app = dash.Dash(__name__)
 
+server = app.server
+
 app.css.append_css({
    'external_url': (
        'main.css'
@@ -54,7 +56,7 @@ def render_rocket(idx, row):
         children=[
             html.Div(
                 className="top",
-                children=[html.H1(f"Rocket #{int(idx+1)}" + ": "+row['Rocket'])],
+                children=[html.H1(f"Rocket #{int(idx)}" + ": "+row['Rocket'])],
             ),
             html.Div(
                 className="bottom",
@@ -271,6 +273,8 @@ def timeToNearestLaunch(n):
     tz_diff = localtime().tm_hour - gmtime().tm_hour #(gmtime().tm_day - localtime().tm_day)*24
     full_seconds = 24*3600*diff.days
     hours = int((full_seconds-diff.seconds)/3600/24) - tz_diff
+    if hours < 0:
+        hours += 24
     minutes = int((diff.seconds-hours*60)/60/24)
     return [html.H1([
                 html.A('Next launch:', className='ref', id='next_launch_link'),
