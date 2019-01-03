@@ -135,7 +135,7 @@ MAIN_PAGE = [
             max_date_allowed=dt(3000, 12, 31),
             initial_visible_month=dt(2019, 1, 1),
             start_date=dt(2019, 1, 1),
-            end_date=dt(2020, 1, 1)
+            end_date=dt(2019, 2, 1)
         ),
         id='date_range'
     ),
