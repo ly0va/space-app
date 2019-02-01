@@ -1,7 +1,7 @@
 # Launch.io
 
 An app our team made for NASA Space Apps Hackathon 2018.
-It's supposed to run [here](https://launch-io.herokuapp.com/), but is currently unstable.
+It's supposed to run [here](https://space-app-py.herokuapp.com/), but is currently unstable.
 It's purpose is to provide accessible rocket launch information for everyone.
 
 ## Overview
