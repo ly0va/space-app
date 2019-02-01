@@ -31,4 +31,4 @@ LAUNCHES['same'] = LAUNCHES['lat'].apply(lambda x: density[x])
 
 if __name__ == '__main__':
     from pprint import pprint
-    pprint(FUTURE_LAUNCHES)
+    print(LAUNCHES)

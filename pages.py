@@ -1,6 +1,7 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import datetime
 from datetime import datetime as dt
 import plotly.graph_objs as go
 import pandas as pd
@@ -12,7 +13,7 @@ def divTemplate(idx, row):
         children=[
             html.Div(
                 className="top",
-                children=[html.H1(f"Mission #{idx+1}" + ": "+row['mission'])],
+                children=[html.H1(f"Mission #{idx}" + ": "+row['mission'])],
             ),
             html.Div(
                 className="bottom",
@@ -40,16 +41,17 @@ def divTemplate(idx, row):
     )
 
 def mapTemplate(df):
+    uniquePlaces = df.drop_duplicates(subset=['lat', 'long'], keep='first')
     return go.Figure(
         data=[
             go.Scattermapbox(
-                lat=df['lat'].unique(),
-                lon=df['long'].unique(),
+                lat=uniquePlaces['lat'],
+                lon=uniquePlaces['long'],
                 mode='markers',
                 opacity=0.7,
                 marker=dict(
                     sizemin=10,
-                    size=df['same']*3,
+                    size=uniquePlaces['same']*5,
                     color='limegreen'
                 ),
                 hoverinfo='text',
@@ -57,7 +59,7 @@ def mapTemplate(df):
                                      "family":"Lucida Console",
                                      "color":"black"}
                             },
-                text=df['location'].unique(),
+                text=uniquePlaces['location'],
         )],
         layout=go.Layout(
             hovermode='closest',
@@ -133,9 +135,9 @@ MAIN_PAGE = [
             id='date_picker',
             min_date_allowed=dt(2000, 1, 1),
             max_date_allowed=dt(3000, 12, 31),
-            initial_visible_month=dt(2019, 1, 1),
-            start_date=dt(2019, 1, 1),
-            end_date=dt(2019, 2, 1)
+            initial_visible_month=dt.now(),
+            start_date=dt.now(),
+            end_date=dt.now() + datetime.timedelta(days=365)
         ),
         id='date_range'
     ),

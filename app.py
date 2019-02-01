@@ -56,7 +56,9 @@ def toTimeDate(T):
 def updateMarkersOnDate(st, fin):
     if st and fin:
         times = LAUNCHES['time'].apply(toTimeDate)
-        times = times.apply(lambda x: dt.strptime(st, '%Y-%m-%d') <= x <= dt.strptime(fin, '%Y-%m-%d'))
+        times = times.apply(lambda x: dt.strptime(st[:10], '%Y-%m-%d') <= \
+                                      x <= \
+                                      dt.strptime(fin[:10], '%Y-%m-%d'))
         return mapTemplate(LAUNCHES[times])
     else:
         return mapTemplate(LAUNCHES)
@@ -68,16 +70,19 @@ def updateMarkersOnDate(st, fin):
                Input('date_picker', 'end_date')])
 def updateLaunchList(clickData, tab, st, fin):
     if tab == 'tab-1':
+        # show launches in a specific location
         if not clickData:
             return html.Div(style={'height': "1000px"})
+        # select the launches with the same coords as the place selected
         sameCoords = LAUNCHES['lat'] == clickData['points'][0]['lat']
-        comp = lambda x : dt.strptime(st, '%Y-%m-%d') <= \
+        comp = lambda x : dt.strptime(st[:10], '%Y-%m-%d') <= \
                           toTimeDate(x) <= \
-                          dt.strptime(fin, '%Y-%m-%d')
+                          dt.strptime(fin[:10], '%Y-%m-%d')
         inDateRange = LAUNCHES['time'].apply(comp)
         launch = LAUNCHES[sameCoords & inDateRange]
         return [divTemplate(index, row) for index, row in launch.iterrows()]
     elif tab == 'tab-2':
+        # show all the launches
         return [divTemplate(index, row) for index, row in LAUNCHES.iterrows()]
 
 @app.callback(Output('Timer', 'children'),
