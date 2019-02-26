@@ -28,6 +28,6 @@ The data about the rocket launches is being collected from [here](http://www.spa
 
 [Andrii Denysenko](https://github.com/ANDREYDEN)
 
-Aleksandr Makarchuk
+[Oleksandr Makarchuk](https://github.com/Slimo145)
 
 Eduard Laptiev
