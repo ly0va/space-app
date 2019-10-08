@@ -22,7 +22,6 @@ app.layout = html.Div(
     ]
 )
 
-
 '''
 FUNCTION:
     Converts date string to datetime. 
