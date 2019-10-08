@@ -1,7 +1,8 @@
 import pandas as pd
-import scrap
 import requests
 import bs4
+
+import scrap
 
 MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiYW5kcmV5ZGVuIiwiYSI6ImNqbmhwdGlkMjBhYzQzanJzbTM3NzdobW8ifQ.ZR_vrBuTDB1-byVDkuxn4g'
 MAPBOX_STYLE = 'mapbox://styles/redboot/cjnidreh14o5o2rs1vgnsol2p'
@@ -23,11 +24,6 @@ def get_image(query):
 
 ROCKETS = pd.read_excel('../data/Rockets and spaceports.xlsx', 'Rockets')
 
-# add photos
-for index, row in ROCKETS.iterrows():
-    if pd.isnull(row["Rocket"]): continue
-    row["Photo"] = get_image("Rocket "+row["Rocket"])
-
 PAST_LAUNCHES = scrap.getLaunches(past=True)
 FUTURE_LAUNCHES = scrap.getLaunches()
 LAUNCHES = pd.DataFrame(data=PAST_LAUNCHES + FUTURE_LAUNCHES)
@@ -40,5 +36,9 @@ density = LAUNCHES['lat'].value_counts()
 LAUNCHES['same'] = LAUNCHES['lat'].apply(lambda x: density[x])
 
 if __name__ == '__main__':
-    from pprint import pprint
-    print(LAUNCHES)
+    # for index, row in ROCKETS.iterrows():
+    #     if pd.isnull(row["Rocket"]):
+    #         continue
+    #     row["Photo"] = get_image("Rocket "+row["Rocket"])
+    # ROCKETS.to_excel("../data/Rockets and spaceports.xlsx")
+    print(LAUNCHES.drop(['description', 'image', 'window'], axis=1))

@@ -71,6 +71,7 @@ RETURNS:
       'location':str, 'pad': str, 'lat': float, 'long': float}] - list of all launches
 '''
 def getLaunches(past=False):
+    print("getting launches")
     LINK = "http://www.spaceflightinsider.com/launch-schedule/"
     if past:
         LINK += "?past=1"

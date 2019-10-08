@@ -8,8 +8,7 @@ import pandas as pd
 import plotly.plotly as py
 import plotly.graph_objs as go
 
-from pages import divTemplate, mapTemplate, INDEX_PAGE, MAIN_PAGE, ROCKETS_PAGE
-from consts import LAUNCHES, FUTURE_LAUNCHES
+from pages import divTemplate, mapTemplate, INDEX_PAGE, MAIN_PAGE, ROCKETS_PAGE, LAUNCHES, FUTURE_LAUNCHES
 
 app = dash.Dash(__name__)
 server = app.server
@@ -22,6 +21,7 @@ app.layout = html.Div(
         html.Div(className='main', id='Main')
     ]
 )
+
 
 '''
 FUNCTION:

@@ -1,11 +1,13 @@
+import datetime
+
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import datetime
 from datetime import datetime as dt
-import plotly.graph_objs as go
 import pandas as pd
-from consts import MAPBOX_ACCESS_TOKEN, MAPBOX_STYLE, ROCKETS, LAUNCHES
+import plotly.graph_objs as go
+
+from consts import MAPBOX_ACCESS_TOKEN, MAPBOX_STYLE, ROCKETS, LAUNCHES, FUTURE_LAUNCHES
 
 def divTemplate(idx, row):
     return html.Div(
@@ -41,6 +43,7 @@ def divTemplate(idx, row):
     )
 
 def mapTemplate(df):
+    print(df[['location', 'time']])
     uniquePlaces = df.drop_duplicates(subset=['lat', 'long'], keep='first')
     return go.Figure(
         data=[
