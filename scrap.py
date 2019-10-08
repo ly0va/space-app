@@ -35,7 +35,7 @@ RETURNS:
 def updatePlaces(key):
     LINK = "http://www.spaceflightinsider.com/launch-schedule/"
 
-    with open('../data/places.txt') as fin:
+    with open('data/places.txt') as fin:
         places = json.load(fin)
     
     for url in [LINK, LINK+"?past=1"]:
@@ -56,7 +56,7 @@ def updatePlaces(key):
             coordinates = places.get(result['location'], geocode(result['location'], key))
             places[result['location']] = coordinates
 
-    with open('../data/places.txt', 'w') as fout:
+    with open('data/places.txt', 'w') as fout:
         json.dump(places, fout)
 
     return places
@@ -79,7 +79,7 @@ def getLaunches(past=False):
     soup = BeautifulSoup(page.text, 'lxml')
 
     # open all saved places and their coords
-    with open('../data/places.txt') as fin:
+    with open('data/places.txt') as fin:
         places = json.load(fin)
 
     launches = []

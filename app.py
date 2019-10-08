@@ -5,7 +5,6 @@ from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
-import plotly.plotly as py
 import plotly.graph_objs as go
 
 from pages import divTemplate, mapTemplate, INDEX_PAGE, MAIN_PAGE, ROCKETS_PAGE, LAUNCHES, FUTURE_LAUNCHES

@@ -22,7 +22,7 @@ def get_image(query):
         if query in img["alt"]:
              return img["src"]
 
-ROCKETS = pd.read_excel('../data/Rockets and spaceports.xlsx', 'Rockets')
+ROCKETS = pd.read_excel('data/Rockets and spaceports.xlsx', 'Rockets')
 
 PAST_LAUNCHES = scrap.getLaunches(past=True)
 FUTURE_LAUNCHES = scrap.getLaunches()
