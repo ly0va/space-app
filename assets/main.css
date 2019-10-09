@@ -108,9 +108,10 @@ div.bottom::after {
   font-size: 1.5em;
 }
 
-#next_launch_link {
+#next-launch {
   position: relative !important;
   margin: 50px !important;
+  cursor: pointer;
   font-size: 1.5em;
   text-align: center;
 }

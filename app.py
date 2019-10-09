@@ -109,26 +109,27 @@ def updateLaunchList(clickData, tab, st, fin):
               [Input('interval-component', 'n_intervals')])
 def timeToNearestLaunch(n):
     T = FUTURE_LAUNCHES[0]['time']
-    T = T[-20:-1]
+    if T == 'TBD':
+        timeDisplayed = 'TBD'
+    else:
+        T = T[-20:-1]
 
-    diff = dt.strptime(T, '%Y-%m-%d %H:%M:%S') - dt.utcnow()
-    hours, minutes = divmod(diff.seconds/60,60)
+        diff = dt.strptime(T, '%Y-%m-%d %H:%M:%S') - dt.utcnow()
+        hours, minutes = divmod(diff.seconds/60,60)
+        timeDisplayed = ' {} days {} hours {} minutes {} seconds'.format(diff.days,
+                                                                         int(hours),
+                                                                         int(minutes),
+                                                                         diff.seconds % 60)
     return [html.H1([
-                html.A('Next launch:', className='ref', id='next_launch_link'),
-                html.H1(
-                    ' {} days {} hours {} minutes {} seconds'.format(diff.days,
-                                                                     int(hours),
-                                                                     int(minutes),
-                                                                     diff.seconds%60),
-                    id='timer'
-                )
+                html.A('Next launch:', className='ref', id='next-launch'),
+                html.H1(timeDisplayed, id='timer')
             ])]
 
-showing_next_launch_info = False
+showing_next_launch_info = True
 
 '''Trigger showing next launch information'''
 @app.callback(Output('next_launch', 'children'),
-              [Input('next_launch_link', 'n_clicks')])
+              [Input('next-launch', 'n_clicks')])
 def showNextLaunchInfo(n_clicks):
     if n_clicks:
         global showing_next_launch_info
