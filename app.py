@@ -9,6 +9,8 @@ import plotly.graph_objs as go
 
 from pages import divTemplate, mapTemplate, INDEX_PAGE, MAIN_PAGE, ROCKETS_PAGE, LAUNCHES, FUTURE_LAUNCHES
 
+TBD = dt(3000, 12, 31)
+
 app = dash.Dash(__name__)
 server = app.server
 
@@ -32,9 +34,27 @@ RETURNS:
 def toTimeDate(timeString):
     # If the time is not defined return a point in future.
     if timeString == 'TBD':
-        return dt(3000, 12, 31)
+        return TBD
     else:
         return dt.strptime(timeString[-20:-1], '%Y-%m-%d %H:%M:%S')
+
+
+'''
+FUNCTION:
+    Checks if the launch time is valid to display.
+    Returns True if time is between start and finish or yet TBD
+ARGS:
+    str - starting time
+    str - finishing time
+    datetime - time to check
+RETURNS:
+    bool - verdict
+'''
+def validLaunchTime(start, finish, time):
+    return dt.strptime(start[:10], '%Y-%m-%d') <= time and \
+           time <= dt.strptime(finish[:10], '%Y-%m-%d') or \
+           time == TBD
+
 
 #################################################
 ################## CALL BACKS ###################
@@ -51,20 +71,19 @@ def displayRocketList(path_name):
     else:
         return INDEX_PAGE
 
-'''On Date Picker update'''
+'''Update markers on Date Picker update'''
 @app.callback(Output('map', 'figure'),
     [Input('date_picker', 'start_date'),
      Input('date_picker', 'end_date')])
 def updateMarkersOnDate(st, fin):
     if st and fin:
         times = LAUNCHES['time'].apply(toTimeDate)
-        times = times.apply(lambda x: dt.strptime(st[:10], '%Y-%m-%d') <= \
-                                      x <= \
-                                      dt.strptime(fin[:10], '%Y-%m-%d'))
+        times = times.apply(lambda x: validLaunchTime(st, fin, x))
         return mapTemplate(LAUNCHES[times])
     else:
         return mapTemplate(LAUNCHES)
 
+'''Update Rocket list on Date Picker update / Tab change / Map Click'''
 @app.callback(Output('rocket', 'children'),
               [Input('map', 'clickData'),
                Input('tabs', 'value'),
@@ -77,11 +96,9 @@ def updateLaunchList(clickData, tab, st, fin):
             return html.Div(style={'height': "1000px"})
         # select the launches with the same coords as the place selected
         sameCoords = LAUNCHES['lat'] == clickData['points'][0]['lat']
-        comp = lambda x : dt.strptime(st[:10], '%Y-%m-%d') <= \
-                          toTimeDate(x) <= \
-                          dt.strptime(fin[:10], '%Y-%m-%d')
-        inDateRange = LAUNCHES['time'].apply(comp)
-        launch = LAUNCHES[sameCoords & inDateRange]
+        validTimes = LAUNCHES['time'].apply(toTimeDate)
+        validTimes = validTimes.apply(lambda x: validLaunchTime(st, fin, x))
+        launch = LAUNCHES[sameCoords & validTimes]
         return [divTemplate(index, row) for index, row in launch.iterrows()]
     elif tab == 'tab-2':
         # show all the launches
@@ -124,4 +141,4 @@ def showNextLaunchInfo(n_clicks):
 
 if __name__ == '__main__':
     #app.scripts.config.serve_locally = False
-    app.run_server(debug=True)
+    app.run_server()

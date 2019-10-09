@@ -43,7 +43,6 @@ def divTemplate(idx, row):
     )
 
 def mapTemplate(df):
-    print(df[['location', 'time']])
     uniquePlaces = df.drop_duplicates(subset=['lat', 'long'], keep='first')
     return go.Figure(
         data=[
