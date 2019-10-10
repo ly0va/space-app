@@ -32,7 +32,7 @@ def cardComponent(idx, data, launch=False, rocket=False):
     if launch:
         header = 'mission'
         descriptors = ['time', 'location', 'vehicle',
-                      'pad', 'window', 'description']
+                      'pad', 'description']
     elif rocket:
         header = 'rocket'
         descriptors = ['company', 'country', 'site']
@@ -125,7 +125,7 @@ MAIN_PAGE = [
            children="Info"),
     html.H1(id='page-title', children='LAUNCH.IO'),
     html.Div(id='Timer',children='0'),
-    html.Div(id='next_launch'),
+    html.Div(id='next-launch-description'),
     html.Div(
         dcc.DatePickerRange(
             id='date_picker',

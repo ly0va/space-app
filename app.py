@@ -124,15 +124,15 @@ def timeToNearestLaunch(n):
                                                                          int(minutes),
                                                                          diff.seconds % 60)
     return [html.H1([
-                html.A('Next launch:', className='link', id='next-launch'),
+                html.A('Next launch:', className='link', id='show-next-launch'),
                 html.H1(timeDisplayed, id='timer')
             ])]
 
 showing_next_launch_info = False
 
 '''Trigger showing next launch information'''
-@app.callback(Output('next-launch', 'children'),
-              [Input('next-launch', 'n_clicks')])
+@app.callback(Output('next-launch-description', 'children'),
+              [Input('show-next-launch', 'n_clicks')])
 def showNextLaunchInfo(n_clicks):
     if n_clicks:
         global showing_next_launch_info
@@ -141,7 +141,7 @@ def showNextLaunchInfo(n_clicks):
             return ''
         else:
             showing_next_launch_info = True
-            return launchComponent(1, FUTURE_LAUNCHES[0])
+            return cardComponent(1, FUTURE_LAUNCHES[0], launch=True)
 
 if __name__ == '__main__':
     #app.scripts.config.serve_locally = False

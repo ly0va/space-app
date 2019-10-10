@@ -40,7 +40,7 @@ body {
   padding: 0;
 }
 
-#next_launch {
+#show-next-launch {
   transform: scale(0.75);
   transform-origin: top left;
   padding:0; 
