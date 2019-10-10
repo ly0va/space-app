@@ -116,7 +116,7 @@ def mapComponent(df):
 
 ROCKETS_PAGE = [html.Div(
     html.H2("Rockets list", id="page-title")
-)]+[cardComponent(index, data, rocket=True) for index, data in ROCKETS.iterrows()]
+)]+[cardComponent(index, data, rocket=True) for index, data in ROCKETS.dropna().iterrows()]
 
 MAIN_PAGE = [
     dcc.Link('Rockets', id='rockets', className='link', href='/rockets'),
