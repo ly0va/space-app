@@ -1,3 +1,12 @@
+'''
+Defines Main page and Rockets page layout.
+
+Components:
+    - launchComponent
+    - mapComponent
+    - rocketComponent
+'''
+
 import datetime
 
 import dash
@@ -9,32 +18,30 @@ import plotly.graph_objs as go
 
 from consts import MAPBOX_ACCESS_TOKEN, MAPBOX_STYLE, ROCKETS, LAUNCHES, FUTURE_LAUNCHES
 
-def divTemplate(idx, row):
+'''
+ARGS:
+    int - iteration index
+    pd.Series - data to display
+RETURNS:
+    html.Div - division to display
+'''
+def launchComponent(idx, data):
     return html.Div(
-        className="launch",
+        className="launch card",
         children=[
             html.Div(
-                className="top",
-                children=[html.H1(f"Mission #{idx}" + ": "+row['mission'])],
+                className="launch-header",
+                children=[html.H1(f"Mission #{idx}: {data['mission']}")],
             ),
             html.Div(
-                className="bottom",
+                className="launch-main",
                 children=[
-                    html.Img(src=row['image']),
-                    html.Div(className="text",
+                    html.Img(src=data['image']),
+                    html.Div(className="launch-description",
                     children=[
-                        html.Div(
-                            className="info",
-                            children=[
-                                html.P(children=[html.B(children=k.capitalize()), ': '+ str(v)])
-                                for k, v in row.items()
-                                if k in ['vehicle', 'time', 'location', 'pad', 'window'] and str(v) != "nan"
-                            ]
-                        ),
-                        html.Div(
-                            className="description",
-                            children=row['description'],
-                        )
+                        html.P(children=[html.B(children=col.capitalize()), ': '+ str(data[col])])
+                        for col in ['time', 'location', 'vehicle', 'pad', 'window', 'description']
+                        if str(data[col]) != "nan"
                     ])
 
                 ]
@@ -42,7 +49,7 @@ def divTemplate(idx, row):
         ]
     )
 
-def mapTemplate(df):
+def mapComponent(df):
     uniquePlaces = df.drop_duplicates(subset=['lat', 'long'], keep='first')
     return go.Figure(
         data=[
@@ -87,27 +94,27 @@ def mapTemplate(df):
         )
     )
 
-def render_rocket(idx, row):
-    if pd.isnull(row.values).any():
+def rocketComponent(idx, data):
+    if pd.isnull(data.values).any():
         return ''
     return html.Div(
-        className="rocketinfo",
+        className="rocket",
         children=[
             html.Div(
-                className="top",
-                children=[html.H1(f"Rocket #{int(idx+1)}" + ": "+row['Rocket'])],
+                className="launch-header",
+                children=[html.H1(f"Rocket #{int(idx+1)}" + ": "+data['Rocket'])],
             ),
             html.Div(
-                className="bottom",
+                className="launch-main",
                 children=[
-                    html.Img(src=row["Photo"]),
+                    html.Img(src=data["Photo"]),
                     html.Div(
-                        className="text",
+                        className="launch-description",
                         children=[
                             html.P(children=[html.B(children=k), ': '+ str(v)])
-                            for k, v in row.items()
+                            for k, v in data.items()
                             if k in ['Company', 'Country'] and str(v).lower() != "nan"
-                        ]+[html.P(children=[html.B("Site"), ': ', html.A(row["Site"], href=row["Site"])])]
+                        ]+[html.P(children=[html.B("Site"), ': ', html.A(data["Site"], href=data["Site"])])]
                     )
                 ]
             )
@@ -115,21 +122,15 @@ def render_rocket(idx, row):
     )
 
 ROCKETS_PAGE = [html.Div(
-    html.H1("Rockets list", className="title")
-)]+[render_rocket(index, row) for index, row in ROCKETS.iterrows()]
-
-INDEX_PAGE = [
-    dcc.Link('Home', href='/home'),
-    html.Br(),
-    dcc.Link('Rockets', href='/rockets')
-]
+    html.H2("Rockets list", id="page-title")
+)]+[rocketComponent(index, data) for index, data in ROCKETS.iterrows()]
 
 MAIN_PAGE = [
-    dcc.Link('Rockets', id='rockets', className='ref', href='/rockets'),
+    dcc.Link('Rockets', id='rockets', className='link', href='/rockets'),
     html.A(href="https://clever-boyd-6ef0a3.netlify.com/",
-           className='ref',
+           className='link',
            children="Info"),
-    html.H1(id='name', children='LAUNCH.IO'),
+    html.H1(id='page-title', children='LAUNCH.IO'),
     html.Div(id='Timer',children='0'),
     html.Div(id='next_launch'),
     html.Div(
@@ -146,7 +147,7 @@ MAIN_PAGE = [
     html.Div([
         dcc.Graph(
             id='map',
-            figure=mapTemplate(LAUNCHES),
+            figure=mapComponent(LAUNCHES),
             config={'displayModeBar': False}
         )
     ]),
@@ -159,12 +160,12 @@ MAIN_PAGE = [
     ),
     html.Div([
         dcc.Tabs(id="tabs", className="tabs", value='tab-2', children=[
-            dcc.Tab(label='This location', value='tab-1', className='tab', selected_className="tab-selected"),
-            dcc.Tab(label='ALL', value='tab-2', className='tab', selected_className="tab-selected"),
+            dcc.Tab(label='Selected location', value='tab-1', className='tab', selected_className="tab-selected"),
+            dcc.Tab(label='All launches', value='tab-2', className='tab', selected_className="tab-selected"),
         ]),
         html.Div(
             id='rocket',
-            children=[divTemplate(index, row) for index, row in LAUNCHES.iterrows()]
+            children=[launchComponent(index+1, row) for index, row in LAUNCHES.iterrows()]
         )
     ])
 ]

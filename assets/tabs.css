@@ -1,0 +1,11 @@
+.tab {
+  background-color: var(--card-bg) !important;
+  font-size: 2em;
+  font-weight: bold;
+  border: 1px solid var(--border-color) !important;
+}
+
+.tab-selected {
+  text-decoration: underline;
+  border: 6px solid var(--border-color) !important;
+}

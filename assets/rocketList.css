@@ -1,0 +1,14 @@
+.rocket, .launch-description {
+  float: right;
+  width: 70%;
+}
+
+.rocket img {
+  height: 200px !important;
+  padding: 0 !important;
+  margin: 0.5em;
+}
+
+.rocket a {
+  color: var(--link-color);
+}

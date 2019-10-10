@@ -7,7 +7,7 @@ import dash_html_components as html
 import pandas as pd
 import plotly.graph_objs as go
 
-from pages import divTemplate, mapTemplate, INDEX_PAGE, MAIN_PAGE, ROCKETS_PAGE, LAUNCHES, FUTURE_LAUNCHES
+from pages import launchComponent, mapComponent, MAIN_PAGE, ROCKETS_PAGE, LAUNCHES, FUTURE_LAUNCHES
 
 TBD = dt(3000, 12, 31)
 
@@ -55,9 +55,8 @@ def validLaunchTime(start, finish, time):
            time <= dt.strptime(finish[:10], '%Y-%m-%d') or \
            time == TBD
 
-
 #################################################
-################## CALL BACKS ###################
+################## CALLBACKS ####################
 #################################################
 
 '''Routing'''
@@ -69,7 +68,11 @@ def displayRocketList(path_name):
     elif path_name == '/rockets':
         return ROCKETS_PAGE
     else:
-        return INDEX_PAGE
+        return [
+            dcc.Link('Home', href='/home'),
+            html.Br(),
+            dcc.Link('Rockets', href='/rockets')
+        ]
 
 '''Update markers on Date Picker update'''
 @app.callback(Output('map', 'figure'),
@@ -79,9 +82,9 @@ def updateMarkersOnDate(st, fin):
     if st and fin:
         times = LAUNCHES['time'].apply(toTimeDate)
         times = times.apply(lambda x: validLaunchTime(st, fin, x))
-        return mapTemplate(LAUNCHES[times])
+        return mapComponent(LAUNCHES[times])
     else:
-        return mapTemplate(LAUNCHES)
+        return mapComponent(LAUNCHES)
 
 '''Update Rocket list on Date Picker update / Tab change / Map Click'''
 @app.callback(Output('rocket', 'children'),
@@ -99,12 +102,12 @@ def updateLaunchList(clickData, tab, st, fin):
         validTimes = LAUNCHES['time'].apply(toTimeDate)
         validTimes = validTimes.apply(lambda x: validLaunchTime(st, fin, x))
         launch = LAUNCHES[sameCoords & validTimes]
-        return [divTemplate(index, row) for index, row in launch.iterrows()]
+        return [launchComponent(index+1, row) for index, row in launch.iterrows()]
     elif tab == 'tab-2':
         # show all the launches
-        return [divTemplate(index, row) for index, row in LAUNCHES.iterrows()]
+        return [launchComponent(index+1, row) for index, row in LAUNCHES.iterrows()]
 
-'''Update timer'''
+'''Update timer with time until next launch'''
 @app.callback(Output('Timer', 'children'),
               [Input('interval-component', 'n_intervals')])
 def timeToNearestLaunch(n):
@@ -121,24 +124,24 @@ def timeToNearestLaunch(n):
                                                                          int(minutes),
                                                                          diff.seconds % 60)
     return [html.H1([
-                html.A('Next launch:', className='ref', id='next-launch'),
+                html.A('Next launch:', className='link', id='next-launch'),
                 html.H1(timeDisplayed, id='timer')
             ])]
 
-showing_next_launch_info = True
+showing_next_launch_info = False
 
 '''Trigger showing next launch information'''
-@app.callback(Output('next_launch', 'children'),
+@app.callback(Output('next-launch', 'children'),
               [Input('next-launch', 'n_clicks')])
 def showNextLaunchInfo(n_clicks):
     if n_clicks:
         global showing_next_launch_info
-        if (showing_next_launch_info):
+        if showing_next_launch_info:
             showing_next_launch_info = False
             return ''
         else:
             showing_next_launch_info = True
-            return divTemplate(1, FUTURE_LAUNCHES[0])
+            return launchComponent(1, FUTURE_LAUNCHES[0])
 
 if __name__ == '__main__':
     #app.scripts.config.serve_locally = False

@@ -40,5 +40,5 @@ if __name__ == '__main__':
     #     if pd.isnull(row["Rocket"]):
     #         continue
     #     row["Photo"] = get_image("Rocket "+row["Rocket"])
-    # ROCKETS.to_excel("../data/Rockets and spaceports.xlsx")
+    # ROCKETS.to_excel("data/Rockets and spaceports.xlsx")
     print(LAUNCHES.drop(['description', 'image', 'window'], axis=1))

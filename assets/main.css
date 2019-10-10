@@ -5,19 +5,34 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: "Lucida Console", Monaco, monospace
-}
-body {
-  font-family: Arial;
-  background-color: rgb(0, 31, 31);
+  font-family: "Lucida Console", Monaco, monospace;
+
+  --main-bg: rgb(0, 31, 31);
+  --card-bg: limegreen;
+  --img-bg: rgb(0, 14, 54);
+  --border-color: darkGreen;
+  --title-color: limegreen;
+  --text-color: yellow;
+  --link-color: rgb(75, 121, 75);
 }
 
-.title {
+body {
+  font-family: Arial;
+  background-color: var(--main-bg);
+}
+
+#page-title {
+  font-size: 4em;
+  border: 5px solid var(--border-color);
+  width: 400px;
+  color: var(--title-color);
   text-align: center;
-  color: limegreen;
-  font-size: 3em;
-  margin-top: 1em;
-  text-decoration: underline
+  display: block;
+  margin: 20px auto;
+}
+
+#page-title::first-letter {
+  font-size: 1.5em;
 }
 
 #map {
@@ -25,39 +40,19 @@ body {
   padding: 0;
 }
 
-div.main > h1 {
-  color: green;
-  text-align: center;
-  font-size: 0.5em;
-  margin: 1em;
-}
-
-.text {
+.launch-description {
   margin-top: 1em;
   font-size: 1.2em;
 }
 
-div.rocketinfo div.text {
-  float: right;
-  width: 70%;
-}
+/*************************************************/
 
-div.rocketinfo img {
-  height: 200px !important;
-  padding: 0 !important;
-  margin: 0.5em;
-}
-
-div.rocketinfo a {
-  color: darkgreen;
-}
-
-.launch, .rocketinfo {
+.card {
     margin: 2em;
     padding: 2em;
     border-radius: 1em;
     text-align: left;
-    background-color: limegreen;
+    background-color: var(--card-bg);
     font-size: 1.2em;
     overflow: auto;
 }
@@ -73,28 +68,27 @@ img {
   float: left;
   height: 300px;
   padding: 10px 100px;
-  background-color: darkgreen;
+  background-color: var(--img-bg);
   border-radius: 1em;
   margin-top: 1em;
 }
 
-div.text {
-  float: right;
-  width: 75%;
-}
-
-div.bottom::after {
+.launch-main::after {
   clear: both;
 }
 
-.ref {
+.link {
   position: absolute;
   top: 10px;
   right: 10px;
   font-size: 2em;
-  color: yellow;
+  color: var(--text-color);
   text-decoration: none;
   font-weight: bold;
+}
+
+.link:hover {
+  text-decoration: underline;
 }
 
 #rockets {
@@ -114,77 +108,4 @@ div.bottom::after {
   cursor: pointer;
   font-size: 1.5em;
   text-align: center;
-}
-
-#name {
-  font-size: 4em;
-  border: 5px solid darkgreen;
-  width:400px;
-  color: limegreen;
-  text-align: center;
-  display: block;
-  margin: 20px auto;
-}
-
-#name::first-letter {
-  font-size: 1.5em;
-}
-
-
-
-
-#date_range {
-  margin: 10px;
-}
-
-.DateRangePickerInput {
-  border: 3px solid black !important;
-  background-color: limegreen;
-}
-
-.DateInput, .DayPicker, .CalendarMonth, .DayPickerNavigation--horizontal,
-.DayPickerNavigation__prev, .DayPickerNavigation__next,
-.CalendarDay--selected-span{
-  font-family: "Lucida Console", Monaco, monospace;
-  font-weight: bold;
-  background-color: limegreen !important;
-}
-
-.CalendarDay__button, .DayPickerNavigation__prev, .DayPickerNavigation__next{
-  border: 1px solid black;
-}
-
-.DayPickerNavigation--horizontal {
-  border-bottom: 1px solid black;
-}
-
-.CalendarDay--selected-start, .CalendarDay--selected-end {
-  background-color: darkgreen !important;
-}
-
-.CalendarDay--selected-span {
-  background-color: rgba(255, 255, 0, 0.5) !important;
-}
-
-.DayPickerKeyboardShortcuts__show--bottom-right {
-  border-right: 33px solid darkgreen !important;
-}
-
-
-
-
-.ref:hover {
-  text-decoration: underline;
-}
-
-.tab {
-  background-color: limegreen !important;
-  font-size: 2em;
-  font-weight: bold;
-  border: 1px solid darkgreen !important;
-}
-
-.tab-selected {
-  text-decoration: underline;
-  border: 6px solid darkgreen !important;
 }
