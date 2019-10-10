@@ -72,7 +72,7 @@ body {
 #timer {
   top:0;
   margin: 30px !important;
-  color: darkgreen;
+  color: var(--title-color);
   font-size: 1.5em;
 }
 
