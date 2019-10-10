@@ -37,8 +37,8 @@ LAUNCHES['same'] = LAUNCHES['lat'].apply(lambda x: density[x])
 
 if __name__ == '__main__':
     # for index, row in ROCKETS.iterrows():
-    #     if pd.isnull(row["Rocket"]):
+    #     if pd.isnull(row["rocket"]):
     #         continue
-    #     row["Photo"] = get_image("Rocket "+row["Rocket"])
+    #     row["image"] = get_image("Rocket "+row["Rocket"])
     # ROCKETS.to_excel("data/Rockets and spaceports.xlsx")
     print(LAUNCHES.drop(['description', 'image', 'window'], axis=1))

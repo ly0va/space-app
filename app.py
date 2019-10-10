@@ -7,7 +7,7 @@ import dash_html_components as html
 import pandas as pd
 import plotly.graph_objs as go
 
-from pages import launchComponent, mapComponent, MAIN_PAGE, ROCKETS_PAGE, LAUNCHES, FUTURE_LAUNCHES
+from pages import cardComponent, mapComponent, MAIN_PAGE, ROCKETS_PAGE, LAUNCHES, FUTURE_LAUNCHES
 
 TBD = dt(3000, 12, 31)
 
@@ -102,10 +102,10 @@ def updateLaunchList(clickData, tab, st, fin):
         validTimes = LAUNCHES['time'].apply(toTimeDate)
         validTimes = validTimes.apply(lambda x: validLaunchTime(st, fin, x))
         launch = LAUNCHES[sameCoords & validTimes]
-        return [launchComponent(index+1, row) for index, row in launch.iterrows()]
+        return [cardComponent(index+1, row, launch=True) for index, row in launch.iterrows()]
     elif tab == 'tab-2':
         # show all the launches
-        return [launchComponent(index+1, row) for index, row in LAUNCHES.iterrows()]
+        return [cardComponent(index+1, row, launch=True) for index, row in LAUNCHES.iterrows()]
 
 '''Update timer with time until next launch'''
 @app.callback(Output('Timer', 'children'),

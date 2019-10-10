@@ -40,41 +40,15 @@ body {
   padding: 0;
 }
 
-.launch-description {
-  margin-top: 1em;
-  font-size: 1.2em;
-}
-
-/*************************************************/
-
-.card {
-    margin: 2em;
-    padding: 2em;
-    border-radius: 1em;
-    text-align: left;
-    background-color: var(--card-bg);
-    font-size: 1.2em;
-    overflow: auto;
-}
-
 #next_launch {
   transform: scale(0.75);
   transform-origin: top left;
-  padding:0; margin:0;
-}
-
-img {
-  display: block;
-  float: left;
-  height: 300px;
-  padding: 10px 100px;
-  background-color: var(--img-bg);
-  border-radius: 1em;
-  margin-top: 1em;
-}
-
-.launch-main::after {
-  clear: both;
+  padding:0; 
+  position: relative !important;
+  margin: 50px !important;
+  cursor: pointer;
+  font-size: 1.5em;
+  text-align: center;
 }
 
 .link {
@@ -102,10 +76,3 @@ img {
   font-size: 1.5em;
 }
 
-#next-launch {
-  position: relative !important;
-  margin: 50px !important;
-  cursor: pointer;
-  font-size: 1.5em;
-  text-align: center;
-}

@@ -22,28 +22,48 @@ from consts import MAPBOX_ACCESS_TOKEN, MAPBOX_STYLE, ROCKETS, LAUNCHES, FUTURE_
 ARGS:
     int - iteration index
     pd.Series - data to display
+    bool - True if the card is a launch
+    bool - True if the card is a rocket
 RETURNS:
     html.Div - division to display
 '''
-def launchComponent(idx, data):
+def cardComponent(idx, data, launch=False, rocket=False):
+    descriptors = []
+    if launch:
+        header = 'mission'
+        descriptors = ['time', 'location', 'vehicle',
+                      'pad', 'window', 'description']
+    elif rocket:
+        header = 'rocket'
+        descriptors = ['company', 'country', 'site']
+
     return html.Div(
-        className="launch card",
+        className="card",
         children=[
             html.Div(
-                className="launch-header",
-                children=[html.H1(f"Mission #{idx}: {data['mission']}")],
+                className="card-header",
+                children=[html.H1(f"{header.capitalize()} #{idx}: {data[header]}")],
             ),
             html.Div(
-                className="launch-main",
+                className="card-main",
                 children=[
-                    html.Img(src=data['image']),
-                    html.Div(className="launch-description",
-                    children=[
-                        html.P(children=[html.B(children=col.capitalize()), ': '+ str(data[col])])
-                        for col in ['time', 'location', 'vehicle', 'pad', 'window', 'description']
-                        if str(data[col]) != "nan"
-                    ])
-
+                    html.Div(
+                        className="card-image",
+                        children=[
+                            html.Img(src=data['image'])
+                        ]
+                    ),
+                    html.Div(
+                        className="card-description",
+                        children=[
+                            html.P(
+                                children=[
+                                    html.B(col.capitalize()), ': ' + str(data[col])
+                                ]
+                            ) 
+                            for col in descriptors if str(data[col]) != "nan"
+                        ]
+                    )
                 ]
             )
         ]
@@ -94,36 +114,9 @@ def mapComponent(df):
         )
     )
 
-def rocketComponent(idx, data):
-    if pd.isnull(data.values).any():
-        return ''
-    return html.Div(
-        className="rocket",
-        children=[
-            html.Div(
-                className="launch-header",
-                children=[html.H1(f"Rocket #{int(idx+1)}" + ": "+data['Rocket'])],
-            ),
-            html.Div(
-                className="launch-main",
-                children=[
-                    html.Img(src=data["Photo"]),
-                    html.Div(
-                        className="launch-description",
-                        children=[
-                            html.P(children=[html.B(children=k), ': '+ str(v)])
-                            for k, v in data.items()
-                            if k in ['Company', 'Country'] and str(v).lower() != "nan"
-                        ]+[html.P(children=[html.B("Site"), ': ', html.A(data["Site"], href=data["Site"])])]
-                    )
-                ]
-            )
-        ]
-    )
-
 ROCKETS_PAGE = [html.Div(
     html.H2("Rockets list", id="page-title")
-)]+[rocketComponent(index, data) for index, data in ROCKETS.iterrows()]
+)]+[cardComponent(index, data, rocket=True) for index, data in ROCKETS.iterrows()]
 
 MAIN_PAGE = [
     dcc.Link('Rockets', id='rockets', className='link', href='/rockets'),
@@ -165,7 +158,9 @@ MAIN_PAGE = [
         ]),
         html.Div(
             id='rocket',
-            children=[launchComponent(index+1, row) for index, row in LAUNCHES.iterrows()]
+            children=[
+                cardComponent(index+1, row, launch=True) for index, row in LAUNCHES.iterrows()
+            ]
         )
     ])
 ]
