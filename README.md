@@ -1,18 +1,17 @@
 # Launch.io
 
-An app our team made for NASA Space Apps Hackathon 2018.
-It's supposed to run [here](https://space-app-py.herokuapp.com/), but is currently unstable (try updating a couple of times).
-It's purpose is to provide accessible rocket launch information for everyone.
+An app our team made for NASA Space Apps Hackathon 2018. It's purpose is to provide accessible rocket launch information for everyone.
+**Try it out [here](https://launch-io.herokuapp.com/).**
 
 ## Overview
 
-At the top of main page user can get time of the next flight.
+At the top of main page you can find some details about the next flight.
 
 ![top](Gallery/startscreen.png)
 
-It is also possible to read information about a particular spaceport by clicking on it's marker on map. The bigger the circle the more launches will be done from this locatin. All data will be shown below the map.
+It is also possible to read information about a particular spaceport by clicking on it's marker on the map. The bigger the circle, the more launches will be done from this locatin. All launch descriptions can be found below the map.
 
-Another feature is the ability to filter launches by time period, which can be chosen by picking two dates on the calendar. 
+Another feature is the ability to filter launches by time period, which can be chosen by picking two dates on the calendar above the map. 
 
 At the top right corner two links are located. The first one shows information about the reasons when and where a rocket will be launched and why a flight can be cancelled. 
 
