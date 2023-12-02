@@ -1,7 +1,7 @@
 # Launch.io
 
 An app our team made for NASA Space Apps Hackathon 2018. It's purpose is to provide accessible rocket launch information for everyone.
-**Try it out [here](https://launch-io.herokuapp.com/).**
+**Try it out [here](https://launchio-932961e1943e.herokuapp.com/).**
 
 ## Overview
 
