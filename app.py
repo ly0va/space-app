@@ -118,7 +118,7 @@ def timeToNearestLaunch(n):
     else:
         T = T[-20:-1]
 
-        diff = dt.strptime(T, DATE_FORMAT) - dt.utcnow()
+        diff = dt.strptime(T, DATE_FORMAT) - dt.now()
         hours, minutes = divmod(diff.seconds/60,60)
         timeDisplayed = ' {} days {} hours {} minutes {} seconds'.format(diff.days,
                                                                          int(hours),

@@ -73,10 +73,11 @@ def getLaunches(past=False):
     '''
 
     launchesUrl = "https://ll.thespacedevs.com/2.2.0/launch"
+    
     if past:
         launchesUrl += "/previous"
-
-    launchesUrl += "?mode=list?limit=100"
+    else:
+        launchesUrl += "/upcoming"
     
     print(f"Getting launches from {launchesUrl}")
     response = requests.get(launchesUrl)
