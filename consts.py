@@ -4,6 +4,8 @@ import bs4
 
 import scrap
 
+DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'
+
 MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiYW5kcmV5ZGVuIiwiYSI6ImNqbmhwdGlkMjBhYzQzanJzbTM3NzdobW8ifQ.ZR_vrBuTDB1-byVDkuxn4g'
 MAPBOX_STYLE = 'mapbox://styles/redboot/cjnidreh14o5o2rs1vgnsol2p'
 
@@ -29,11 +31,12 @@ FUTURE_LAUNCHES = scrap.getLaunches()
 LAUNCHES = pd.DataFrame(data=PAST_LAUNCHES + FUTURE_LAUNCHES)
 
 # get rid of launches without a location
-LAUNCHES = LAUNCHES[~LAUNCHES['lat'].isna()]
+if not LAUNCHES.empty:
+    LAUNCHES = LAUNCHES[~LAUNCHES['lat'].isna()]
 
-# get rid of repeating places
-density = LAUNCHES['lat'].value_counts()
-LAUNCHES['same'] = LAUNCHES['lat'].apply(lambda x: density[x])
+    # get rid of repeating places
+    density = LAUNCHES['lat'].value_counts()
+    LAUNCHES['same'] = LAUNCHES['lat'].apply(lambda x: density[x])
 
 if __name__ == '__main__':
     # for index, row in ROCKETS.iterrows():

@@ -1,4 +1,4 @@
-xlrd
+openpyxl
 lxml
 pandas
 bs4

@@ -1,4 +1,5 @@
 from datetime import datetime as dt
+from consts import DATE_FORMAT
 
 import dash
 from dash.dependencies import Input, Output
@@ -36,7 +37,7 @@ def toTimeDate(timeString):
     if timeString == 'TBD':
         return TBD
     else:
-        return dt.strptime(timeString[-20:-1], '%Y-%m-%d %H:%M:%S')
+        return dt.strptime(timeString[-20:-1], DATE_FORMAT)
 
 
 '''
@@ -117,7 +118,7 @@ def timeToNearestLaunch(n):
     else:
         T = T[-20:-1]
 
-        diff = dt.strptime(T, '%Y-%m-%d %H:%M:%S') - dt.utcnow()
+        diff = dt.strptime(T, DATE_FORMAT) - dt.utcnow()
         hours, minutes = divmod(diff.seconds/60,60)
         timeDisplayed = ' {} days {} hours {} minutes {} seconds'.format(diff.days,
                                                                          int(hours),

@@ -61,49 +61,44 @@ def updatePlaces(key):
 
     return places
 
-'''
-FUNCTION:
-    Returns a dict containing info about future launches 
-ARGS:
-    bool - determines which launches to show (past or future)
-RETURNS:
-    [{'image': str, 'mission': str, 'description': str, 
-      'location':str, 'pad': str, 'lat': float, 'long': float}] - list of all launches
-'''
 def getLaunches(past=False):
-    LINK = "http://www.spaceflightinsider.com/launch-schedule/"
+    '''Returns a dict containing info about launches 
+    
+    Args:
+        past (bool): - determines which launches to show (past or future)
+    
+    Returns:
+        [{'image': str, 'mission': str, 'description': str, 'vehicle': str,
+        'time': str, 'location':str, 'pad': str, 'lat': float, 'long': float}] - list of all launches
+    '''
+
+    launchesUrl = "https://ll.thespacedevs.com/2.2.0/launch"
     if past:
-        LINK += "?past=1"
-    page = requests.get(LINK)
-    soup = BeautifulSoup(page.text, 'lxml')
+        launchesUrl += "/previous"
 
-    # open all saved places and their coords
-    with open('data/places.txt') as fin:
-        places = json.load(fin)
+    launchesUrl += "?mode=list?limit=100"
+    
+    print(f"Getting launches from {launchesUrl}")
+    response = requests.get(launchesUrl)
+    if response.status_code != 200:
+        print(f"Error {response.status_code} {response.json()}")
+        return []
+    print(response.json())
+    launches: list = response.json()['results'] 
+    return list(map(mapLaunchResponse, launches))
 
-    launches = []
-    for tag in soup.select("table.launchcalendar"):
-        result = {}
-        details = tag.find(class_="launchdetails").find_all("tr")
-
-        for detail in details:
-            result[detail.th.string.lower()] = detail.td.get_text()
-
-        style = tag.find(class_='vehicle').div['style']
-        index = style.index("http")
-        result['image'] = style[index:-3]
-        result['mission'] = tag.find(colspan='2').get_text()
-        result['description'] = tag.find(class_='description').p.get_text()
-        place = result['location'].split(' ')
-        result['location'] = ' '.join(place[:-1])
-        result['pad'] = place[-1]
-        coordinates = places.get(result['location'], None)
-        if coordinates:
-            result['long'] = coordinates.get('lng', None)
-            result['lat'] = coordinates.get('lat', None)
-        launches.append(result)
-
-    return launches
+def mapLaunchResponse(launchResponse):
+    return {
+        'image': launchResponse['image'],
+        'mission': launchResponse['mission']['name'],
+        'description': launchResponse['mission']['description'],
+        'vehicle': launchResponse['rocket']['configuration']['name'],
+        'time': launchResponse['window_start'],
+        'location': launchResponse['pad']['location']['name'],
+        'pad': launchResponse['pad']['name'],
+        'lat': launchResponse['pad']['latitude'],
+        'long': launchResponse['pad']['longitude']
+    }
 
 if __name__ == '__main__':
     from pprint import pprint
@@ -112,7 +107,8 @@ if __name__ == '__main__':
     # updatePlaces(key)
     launches = getLaunches()
     for l in launches:
-        pprint(l['mission'])
-        pprint(l['location'])
-        pprint(l['lat'])
+        # pprint(l['mission'])
+        # pprint(l['location'])
+        # pprint(l['lat'])
+        pprint(l)
         print()
